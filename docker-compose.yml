@@ -1,6 +1,7 @@
 services:
   eyeofjanthir:
-    build: .
+    image: alex4991/eyeofjanthir:latest
+    # build: .  # Uncomment to build locally instead
     container_name: eyeofjanthir
     restart: unless-stopped
     env_file:
