@@ -9,7 +9,9 @@ namespace EyeOfJanthir.Models;
 [JsonSerializable(typeof(HealthState))]
 [JsonSerializable(typeof(PortainerEndpoint))]
 [JsonSerializable(typeof(List<PortainerEndpoint>))]
+[JsonSerializable(typeof(DiscordWebhookPayload))]
+[JsonSerializable(typeof(DiscordEmbed))]
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-public partial class PortainerJsonContext : JsonSerializerContext
+public partial class AppJsonContext : JsonSerializerContext
 {
 }

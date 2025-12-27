@@ -1,0 +1,7 @@
+services:
+  eyeofjanthir:
+    build: .
+    container_name: eyeofjanthir
+    restart: unless-stopped
+    env_file:
+      - .env

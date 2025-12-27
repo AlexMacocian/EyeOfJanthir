@@ -18,7 +18,7 @@ public sealed class PortainerService(
         {
             return await this.httpClient.GetFromJsonAsync(
                 "/api/endpoints",
-                PortainerJsonContext.Default.ListPortainerEndpoint, cancellationToken) ?? [];
+                AppJsonContext.Default.ListPortainerEndpoint, cancellationToken) ?? [];
         }
         catch (Exception ex)
         {
@@ -33,7 +33,7 @@ public sealed class PortainerService(
         {
             return await this.httpClient.GetFromJsonAsync(
                 $"/api/endpoints/{portainerEndpoint.Id}/docker/containers/json?all={true}",
-                PortainerJsonContext.Default.ListContainerInfo, cancellationToken) ?? [];
+                AppJsonContext.Default.ListContainerInfo, cancellationToken) ?? [];
         }
         catch (Exception ex)
         {

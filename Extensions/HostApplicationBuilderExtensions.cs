@@ -60,8 +60,23 @@ public static class HostApplicationBuilderExtensions
 
     public static HostApplicationBuilder WithNotifications(this HostApplicationBuilder hostApplicationBuilder)
     {
-        // TODO: Change to Discord notification service once implemented
-        hostApplicationBuilder.Services.AddSingleton<INotificationService, LoggingNotificationService>();
+        hostApplicationBuilder.Services.AddOptions<DiscordOptions>()
+            .Bind(hostApplicationBuilder.Configuration.GetSection("Discord"))
+            .Validate(opts => !string.IsNullOrWhiteSpace(opts.WebhookUrl))
+            .ValidateOnStart();
+
+        hostApplicationBuilder.Services.AddHttpClient(nameof(DiscordNotificationService), (sp, client) =>
+        {
+            var options = sp.GetRequiredService<IOptions<DiscordOptions>>();
+            if (!Uri.TryCreate(options.Value.WebhookUrl, UriKind.Absolute, out var discordWebhook))
+            {
+                throw new InvalidOperationException($"Failed to load discord webhook url {options.Value.WebhookUrl}");
+            }
+
+            client.BaseAddress = discordWebhook;
+        }).AddDefaultLogger();
+
+        hostApplicationBuilder.Services.AddSingleton<INotificationService, DiscordNotificationService>();
 
         return hostApplicationBuilder;
     }
