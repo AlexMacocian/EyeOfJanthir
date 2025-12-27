@@ -32,6 +32,7 @@ public sealed class NotifyEnvironmentChangedUp(
                 await this.notificationService.SendNotificationAsync(
                     title: $"Environment {endpoint.Name} is up",
                     message: $"Environment {endpoint.Id} - {endpoint.Name} is up",
+                    color: DiscordColor.DiscordGreen,
                     cancellationToken);
             }
         }

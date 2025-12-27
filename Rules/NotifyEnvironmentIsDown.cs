@@ -20,6 +20,7 @@ public sealed class NotifyEnvironmentIsDown(
                 await this.notificationService.SendNotificationAsync(
                     title: $"Environment {endpoint.Name} is down",
                     message: $"Environment {endpoint.Id} - {endpoint.Name} is down",
+                    color: DiscordColor.Red,
                     cancellationToken);
             }
         }

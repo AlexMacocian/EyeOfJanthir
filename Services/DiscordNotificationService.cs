@@ -17,7 +17,7 @@ public sealed class DiscordNotificationService(
         this.httpClient.Dispose();
     }
 
-    public async Task SendNotificationAsync(string title, string message, CancellationToken cancellationToken)
+    public async Task SendNotificationAsync(string title, string message, DiscordColor color, CancellationToken cancellationToken)
     {
         this.logger.LogError("{Title}\n{Message}", title, message);
 
@@ -28,7 +28,7 @@ public sealed class DiscordNotificationService(
                 new DiscordEmbed(
                     Title: title,
                     Description: message,
-                    Color: 16711680) // Red color
+                    Color: (int)color)
             ]);
 
         try

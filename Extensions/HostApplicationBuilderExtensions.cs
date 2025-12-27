@@ -50,6 +50,7 @@ public static class HostApplicationBuilderExtensions
 
     public static HostApplicationBuilder WithPortainerStateRules(this HostApplicationBuilder hostApplicationBuilder)
     {
+        hostApplicationBuilder.Services.AddSingleton<IPortainerStateRule, NotifyEyeOfJanthirUp>();
         hostApplicationBuilder.Services.AddSingleton<IPortainerStateRule, NotifyEnvironmentIsDown>();
         hostApplicationBuilder.Services.AddSingleton<IPortainerStateRule, NotifyEnvironmentChangedUp>();
         hostApplicationBuilder.Services.AddSingleton<IPortainerStateRule, NotifyContainerIsDown>();

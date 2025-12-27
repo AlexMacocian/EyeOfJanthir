@@ -26,6 +26,7 @@ public sealed class NotifyContainerIsDown(
                         title: $"Container {string.Join(", ", container.Names)} is down",
                         message: $"Container {container.Id} - {string.Join(", ", container.Names)} is down. State {container.State}. Status {container.Status}. Image {container.Image}\n" +
                         $"Environment {endpoint.Name}. Id {endpoint.Id}. Url {endpoint.Url}. Status {endpoint.Status}",
+                        color: DiscordColor.Red,
                         cancellationToken);
                 }
             }

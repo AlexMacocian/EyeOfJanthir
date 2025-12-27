@@ -26,6 +26,7 @@ public sealed class NotifyContainerChangedUp(INotificationService notificationSe
                         title: $"Container {string.Join(", ", container.Names)} is up",
                         message: $"Container {container.Id} - {string.Join(", ", container.Names)} is up. State {container.State}. Status {container.Status}. Image {container.Image}" +
                         $"Environment {endpoint.Name}. Id {endpoint.Id}. Url {endpoint.Url}. Status {endpoint.Status}",
+                        color: DiscordColor.DiscordGreen,
                         cancellationToken);
                 }
             }
