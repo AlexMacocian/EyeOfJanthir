@@ -1,11 +1,11 @@
-﻿using EyeOfJanthir;
-using EyeOfJanthir.Services;
+﻿using EyeOfJanthir.Extensions;
 using Microsoft.Extensions.Hosting;
 
-Console.WriteLine("Hello, World!");
-
-var apiKey = "ptr_W0BLK3WpRWZbw8fKbuk37fmZuL7QyIThKZ9j8LFLAjs=";
-var url = "https://portainer.gwdevhub.macocian.me";
-
 Host.CreateApplicationBuilder(args)
-    .;
+    .WithEnvironmentVariables()
+    .WithPortainerServices()
+    .WithPortainerStateRules()
+    .WithConsoleLogging()
+    .WithNotifications()
+    .Build()
+    .Run();

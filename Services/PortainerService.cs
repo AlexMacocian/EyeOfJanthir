@@ -1,36 +1,45 @@
 using EyeOfJanthir.Models;
+using Microsoft.Extensions.Logging;
 using System.Net.Http.Json;
 
 namespace EyeOfJanthir.Services;
 
-public sealed class PortainerService
+public sealed class PortainerService(
+    IHttpClientFactory httpClientFactory,
+    ILogger<PortainerService> logger)
     : IDisposable
 {
-    private readonly HttpClient httpClient;
+    private readonly HttpClient httpClient = httpClientFactory.CreateClient(nameof(PortainerService));
+    private readonly ILogger<PortainerService> logger = logger;
 
-    public PortainerService(string portainerUrl, string apiToken)
+    public async Task<List<PortainerEndpoint>?> GetEndpointsAsync(CancellationToken cancellationToken)
     {
-        this.httpClient = new HttpClient
+        try
         {
-            BaseAddress = new Uri(portainerUrl),
-            Timeout = TimeSpan.FromSeconds(30)
-        };
-
-        this.httpClient.DefaultRequestHeaders.Add("X-API-Key", apiToken);
+            return await this.httpClient.GetFromJsonAsync(
+                "/api/endpoints",
+                PortainerJsonContext.Default.ListPortainerEndpoint, cancellationToken) ?? [];
+        }
+        catch (Exception ex)
+        {
+            this.logger.LogError(ex, "Encountered exception while getting endpoints");
+            return default;
+        }
     }
 
-    public async Task<List<PortainerEndpoint>> GetEndpointsAsync(CancellationToken ct = default)
+    public async Task<List<ContainerInfo>?> GetContainersAsync(PortainerEndpoint portainerEndpoint, CancellationToken cancellationToken)
     {
-        return await this.httpClient.GetFromJsonAsync(
-            "/api/endpoints",
-            PortainerJsonContext.Default.ListPortainerEndpoint, ct) ?? [];
-    }
-
-    public async Task<List<ContainerInfo>> GetContainersAsync(int endpointId, bool all = true, CancellationToken ct = default)
-    {
-        return await this.httpClient.GetFromJsonAsync(
-            $"/api/endpoints/{endpointId}/docker/containers/json?all={all}",
-            PortainerJsonContext.Default.ListContainerInfo, ct) ?? [];
+        try
+        {
+            return await this.httpClient.GetFromJsonAsync(
+                $"/api/endpoints/{portainerEndpoint.Id}/docker/containers/json?all={true}",
+                PortainerJsonContext.Default.ListContainerInfo, cancellationToken) ?? [];
+        }
+        catch (Exception ex)
+        {
+            this.logger.LogError(ex, "Encountered exception while getting containers");
+            return default;
+        }
     }
 
     public void Dispose() => this.httpClient.Dispose();

@@ -14,5 +14,5 @@ public record PortainerEndpoint
     public string Url { get; init; } = "";
 
     [JsonPropertyName("Status")]
-    public int Status { get; init; }
+    public PortainerEndpointStatus Status { get; init; }
 }
